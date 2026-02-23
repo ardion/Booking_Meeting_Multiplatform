@@ -1,4 +1,4 @@
-name: Build iOS KMP
+name: Build All Platforms
 
 on:
   push:
@@ -6,36 +6,60 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build iOS
-    runs-on: macos-latest
-
+  # Job untuk Android
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-
-      - name: Cache Kotlin Konan
-        uses: actions/cache@v4
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+      - name: Build Android APK
+        run: ./gradlew :composeApp:assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('**/*.gradle.kts') }}
+          name: Android-APK
+          path: composeApp/build/outputs/apk/debug/
 
-      # Menggunakan iosArm64 karena sudah ada di build.gradle.kts kamu
-      - name: Build iOS Arm64 (Real Device)
+  # Job untuk iOS
+  build-ios:
+    name: Build iOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+      - name: Build iOS
         run: ./gradlew :composeApp:iosArm64Binaries
-
-      - name: Upload Framework Artifact
+      - name: Upload Framework
         uses: actions/upload-artifact@v4
         with:
           name: iOS-Framework
-          # Path hasil build untuk iosArm64
           path: composeApp/build/bin/iosArm64/debugFramework/
+
+  # Job untuk Desktop (JVM)
+  build-desktop:
+    name: Build JVM (Desktop)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build Desktop Exe
+        run: ./gradlew :composeApp:packageDistributionForCurrentOS
+      - name: Upload Desktop App
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-App
+          path: composeApp/build/compose/binaries/main/
