@@ -19,7 +19,7 @@ data class LoginResponse(
 
 @Serializable
 data class UserData(
-    @SerialName("id") val id: String,
+    @SerialName("id") val id: Int,
     @SerialName("username") val username: String,
     @SerialName("name") val nama: String,
     @SerialName("role") val role: String

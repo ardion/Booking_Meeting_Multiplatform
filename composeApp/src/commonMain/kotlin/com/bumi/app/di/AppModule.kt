@@ -35,30 +35,30 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 
-import org.koin.core.module.dsl.viewModel // Sesuaikan dengan versi Koin KMP kamu
+import org.koin.core.module.dsl.viewModel
 
 val appModule = module {
 
     // --- 1. CORE / INFRASTRUCTURE ---
-    single {
-        HttpClient {
-            install(ContentNegotiation) {
-                json(Json {
-                    ignoreUnknownKeys = true
-                    prettyPrint = true
-                })
-            }
-            // --- TAMBAHKAN INI ---
-            install(Logging) {
-                level = LogLevel.ALL // Mencetak header, body, dan URL
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        println("KTOR_LOG: $message") // Filter ini di Logcat nanti
-                    }
-                }
-            }
-        }
-    }
+//    single {
+//        HttpClient {
+//            install(ContentNegotiation) {
+//                json(Json {
+//                    ignoreUnknownKeys = true
+//                    prettyPrint = true
+//                })
+//            }
+//            // --- TAMBAHKAN INI ---
+//            install(Logging) {
+//                level = LogLevel.ALL // Mencetak header, body, dan URL
+//                logger = object : Logger {
+//                    override fun log(message: String) {
+//                        println("KTOR_LOG: $message") // Filter ini di Logcat nanti
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     // Settings & Session Management
     single { Settings() }
