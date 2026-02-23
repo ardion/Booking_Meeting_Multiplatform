@@ -1,0 +1,39 @@
+name: Build iOS KMP
+
+on:
+  push:
+    branches: [ "main", "master" ] # Jalankan saat kamu push ke main atau master
+  workflow_dispatch: # Memungkinkan kamu menjalankan build manual dari web GitHub
+
+jobs:
+  build:
+    name: Build iOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Cache Kotlin Konan
+        uses: actions/cache@v4
+        with:
+          path: ~/.konan
+          key: ${{ runner.os }}-konan-${{ hashFiles('**/*.gradle.kts') }}
+
+      - name: Build iOS Simulator (X64)
+        run: ./gradlew :composeApp:iosX64Binaries
+
+      - name: Upload Framework Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: iOS-Framework
+          path: composeApp/build/bin/iosX64/debugFramework/
