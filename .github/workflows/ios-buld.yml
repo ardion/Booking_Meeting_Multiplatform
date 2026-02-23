@@ -2,8 +2,8 @@ name: Build iOS KMP
 
 on:
   push:
-    branches: [ "main", "master" ] # Jalankan saat kamu push ke main atau master
-  workflow_dispatch: # Memungkinkan kamu menjalankan build manual dari web GitHub
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -29,11 +29,13 @@ jobs:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('**/*.gradle.kts') }}
 
-      - name: Build iOS Simulator (X64)
-        run: ./gradlew :composeApp:iosX64Binaries
+      # Menggunakan iosArm64 karena sudah ada di build.gradle.kts kamu
+      - name: Build iOS Arm64 (Real Device)
+        run: ./gradlew :composeApp:iosArm64Binaries
 
       - name: Upload Framework Artifact
         uses: actions/upload-artifact@v4
         with:
           name: iOS-Framework
-          path: composeApp/build/bin/iosX64/debugFramework/
+          # Path hasil build untuk iosArm64
+          path: composeApp/build/bin/iosArm64/debugFramework/
