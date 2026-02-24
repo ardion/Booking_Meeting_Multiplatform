@@ -372,7 +372,7 @@ fun BookingContent(
         // Time Slots Section (Harus kamu definisikan di file terpisah atau di sini)
         Text("Pilih Jam", style = MaterialTheme.typography.labelLarge)
         FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            val times = listOf("08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00")
+            val times = listOf("08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00")
             times.forEach { time ->
                 val isBooked = bookedSlots.contains(time)
                 FilterChip(
