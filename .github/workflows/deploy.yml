@@ -1,0 +1,27 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ] # Ganti jika nama branch utamamu berbeda
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build Web App
+        run: ./gradlew :composeApp:wasmJsBrowserDistribution # Atau jsBrowserDistribution
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: composeApp/build/dist/wasmJs/productionExecutable # Folder hasil build
+          branch: gh-pages # Hasil build akan dikirim ke branch ini
