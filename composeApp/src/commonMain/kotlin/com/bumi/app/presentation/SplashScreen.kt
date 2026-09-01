@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
-import bumiapp.composeapp.generated.resources.Res // Import Resource KMP
-import bumiapp.composeapp.generated.resources.ic_bumi // Nama filenya
+import bumiapp.composeapp.generated.resources.Res
+import bumiapp.composeapp.generated.resources.ic_bumi
 import com.bumi.app.Screen
 import com.bumi.app.utils.SessionManager
 import org.koin.compose.koinInject
@@ -32,18 +32,16 @@ fun SplashScreen(navController: NavHostController) {
     val scale = remember { Animatable(0f) }
 
     LaunchedEffect(key1 = true) {
-        // Animasi membesar (KMP version)
         scale.animateTo(
             targetValue = 0.9f,
             animationSpec = tween(
                 durationMillis = 800,
-                easing = FastOutSlowInEasing // Pengganti Overshoot yang aman di KMP
+                easing = FastOutSlowInEasing
             )
         )
 
         delay(2000L)
 
-        // Cek login via SessionManager
         val destination = if (sessionManager.isLoggedIn()) {
             Screen.Calendar.route
         } else {
@@ -63,7 +61,6 @@ fun SplashScreen(navController: NavHostController) {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                // Di KMP cara panggil gambarnya seperti ini
                 painter = painterResource(Res.drawable.ic_bumi),
                 contentDescription = "Logo BUMI",
                 modifier = Modifier

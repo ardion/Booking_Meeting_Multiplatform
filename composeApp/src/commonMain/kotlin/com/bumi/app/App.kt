@@ -11,13 +11,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bumi.app.presentation.SplashScreen
 import com.bumi.app.presentation.login.LoginScreen
-import com.bumi.app.presentation.CalendarScreen
 import com.bumi.app.presentation.booking.FullCalendarScreen
 
-/**
- * Definisi rute navigasi menggunakan Sealed Class.
- * Ini mencegah error typo saat memanggil route.
- */
 sealed class Screen(val route: String) {
     data object Splash : Screen("splash")
     data object Login : Screen("login")
@@ -31,24 +26,19 @@ fun App() {
 
         Surface(
             modifier = Modifier.fillMaxSize(),
-            // Warna background biru sesuai kodemu
             color = Color(0xFF4675A6)
         ) {
             NavHost(
                 navController = navController,
                 startDestination = Screen.Splash.route
             ) {
-                // 1. Splash Screen
-                // Tidak perlu kirim SessionManager manual, biar Koin yang handle di dalamnya.
                 composable(Screen.Splash.route) {
                     SplashScreen(navController = navController)
                 }
 
-                // 2. Login Screen
                 composable(Screen.Login.route) {
                     LoginScreen(
                         onLoginSuccess = {
-                            // Navigasi ke Calendar dan hapus Login dari backstack
                             navController.navigate(Screen.Calendar.route) {
                                 popUpTo(Screen.Login.route) { inclusive = true }
                             }
@@ -56,7 +46,6 @@ fun App() {
                     )
                 }
 
-                // 3. Calendar Screen (Halaman Utama setelah Login)
                 composable(Screen.Calendar.route) {
                     FullCalendarScreen(navController = navController)
                 }

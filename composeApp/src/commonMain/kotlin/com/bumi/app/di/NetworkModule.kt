@@ -15,11 +15,9 @@ val networkModule = module {
     single {
         HttpClient {
             install(Logging) {
-                // Gunakan ALL agar header dan body terlihat jelas
                 level = LogLevel.ALL
                 logger = object : Logger {
                     override fun log(message: String) {
-                        // Gunakan tag KTOR_LOG agar mudah di-filter di Logcat
                         println("KTOR_LOG: $message")
                     }
                 }
@@ -41,7 +39,6 @@ val networkModule = module {
 
             defaultRequest {
                 url("https://chatbot-bristle.online/")
-                // Memastikan setiap request mengirim header JSON
                 contentType(io.ktor.http.ContentType.Application.Json)
             }
         }

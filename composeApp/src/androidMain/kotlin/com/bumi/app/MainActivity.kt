@@ -7,8 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.bumi.app.di.appModule         // Module yang berisi UseCase & Repo
-import com.bumi.app.di.networkModule     // Module yang berisi Ktor
+import com.bumi.app.di.appModule
+import com.bumi.app.di.networkModule
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings
 import org.koin.android.ext.koin.androidContext
@@ -20,8 +20,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        // --- INISIALISASI KOIN ---
-        // Kita cek dulu apakah Koin sudah jalan (untuk menghindari error 'Koin already started')
         try {
             startKoin {
                 androidContext(this@MainActivity)
@@ -32,7 +30,6 @@ class MainActivity : ComponentActivity() {
                 )
             }
         } catch (e: Exception) {
-            // Jika sudah start, tidak apa-apa
         }
 
         setContent {
@@ -41,7 +38,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// Module khusus Android untuk menyediakan Settings (SharedPreferences)
 fun androidPlatformModule(context: Context) = module {
     single<Settings> {
         val sharedPrefs = context.getSharedPreferences("user_session", Context.MODE_PRIVATE)
