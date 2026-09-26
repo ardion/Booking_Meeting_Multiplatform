@@ -28,7 +28,6 @@ import kotlinx.datetime.*
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-// --- SCREEN UTAMA ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FullCalendarScreen(
@@ -74,7 +73,6 @@ fun FullCalendarScreen(
             val isDesktop = maxWidth > 700.dp
             val scrollState = rememberScrollState()
 
-            // KUNCI: Column utama ini harus memiliki scroll agar kalender bisa digeser ke atas
             Column(
                 modifier = Modifier
                     .widthIn(max = 1000.dp)
@@ -82,7 +80,6 @@ fun FullCalendarScreen(
                     .then(if (isDesktop) Modifier.verticalScroll(scrollState) else Modifier),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // 1. KALENDER (Bagian yang bikin layar penuh)
                 ModernCalendarCustom(onDateSelected = { date ->
                     selectedDate = date
                     isSheetOpen = true
@@ -106,7 +103,6 @@ fun FullCalendarScreen(
                     fontWeight = FontWeight.Bold, color = Color(0xFFEBEEEF)
                 )
 
-                // 2. FILTER
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).horizontalScroll(rememberScrollState()),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -128,7 +124,6 @@ fun FullCalendarScreen(
                     }
                 }
 
-                // 3. AREA DATA / LOADING (Sekarang bisa di-scroll ke bawah)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -137,7 +132,6 @@ fun FullCalendarScreen(
                 ) {
                     when (val resource = meetingsResource) {
                         is Resource.Loading -> {
-                            // TAMPILAN SAAT LOADING (SHIMMER)
                             if (isDesktop) {
                                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                                     repeat(3) {
@@ -160,7 +154,6 @@ fun FullCalendarScreen(
                                 Text("Tidak ada data", Modifier.align(Alignment.Center).padding(40.dp), color = Color.White)
                             } else {
                                 if (isDesktop) {
-                                    // GRID MANUAL UNTUK WEB AGAR BISA SCROLL SE-KALENDERNYA
                                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                                         filtered.chunked(2).forEach { rowMeetings ->
                                             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -180,14 +173,12 @@ fun FullCalendarScreen(
                                         }
                                     }
                                 } else {
-                                    // MOBILE SCROLL
                                     LazyColumn(
-                                        modifier = Modifier.fillMaxWidth(), // Pakai fillMaxWidth agar lebarnya konsisten
+                                        modifier = Modifier.fillMaxWidth(),
                                         verticalArrangement = Arrangement.spacedBy(10.dp),
                                         contentPadding = PaddingValues(bottom = 80.dp)
                                     ) {
                                         items(filtered) { meeting ->
-                                            // Bungkus dengan Box atau Row dan beri fillMaxWidth
                                             Box(modifier = Modifier.fillMaxWidth()) {
                                                 BookingItem(
                                                     pic = meeting.pic, unit = meeting.unit, tujuan = meeting.tujuan,
@@ -233,7 +224,6 @@ fun ModernCalendarCustom(onDateSelected: (LocalDate) -> Unit) {
         colors = CardDefaults.elevatedCardColors(containerColor = Color(0xFFEFF0F1))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            // Header: Bulan dan Navigasi
             Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
                 Text(
                     "${currentMonth.name} $currentYear",
@@ -252,7 +242,6 @@ fun ModernCalendarCustom(onDateSelected: (LocalDate) -> Unit) {
                 }
             }
 
-            // Days Header (Mon - Sun)
             Row(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
                 listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun").forEach { day ->
                     Text(
@@ -265,21 +254,18 @@ fun ModernCalendarCustom(onDateSelected: (LocalDate) -> Unit) {
                 }
             }
 
-            // Grid Tanggal
             val firstDay = LocalDate(currentYear, currentMonth, 1).dayOfWeek.ordinal
             var dayCounter = 1
 
-            // Loop baris (maksimal 6 baris kalender)
             for (i in 0..5) {
                 Row(Modifier.fillMaxWidth()) {
                     for (j in 0..6) {
                         val isVisible = (i == 0 && j >= firstDay) || (i > 0 && dayCounter <= daysInMonth)
 
-                        // Modifier.weight(1f) memastikan setiap kolom sama lebar
                         Box(
                             modifier = Modifier
                                 .weight(1f)
-                                .aspectRatio(if (dayCounter > daysInMonth && !isVisible) 1f else 1.2f), // Sedikit lebih tinggi agar proporsional
+                                .aspectRatio(if (dayCounter > daysInMonth && !isVisible) 1f else 1.2f),
                             contentAlignment = Alignment.Center
                         ) {
                             if (isVisible && dayCounter <= daysInMonth) {
@@ -321,10 +307,7 @@ fun ModernCalendarCustom(onDateSelected: (LocalDate) -> Unit) {
         }
     }
 }
-// --- KOMPONEN KALENDER CUSTOM (WEB READY) ---
 
-
-// --- FORM CONTENT BOTTOM SHEET ---
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun BookingContent(
@@ -369,7 +352,6 @@ fun BookingContent(
 
         Spacer(Modifier.height(16.dp))
 
-        // Time Slots Section (Harus kamu definisikan di file terpisah atau di sini)
         Text("Pilih Jam", style = MaterialTheme.typography.labelLarge)
         FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             val times = listOf("08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00")
@@ -409,7 +391,6 @@ fun BookingContent(
     }
 }
 
-// --- EFEK SHIMMER ---
 fun Modifier.shimmerEffect(): Modifier = composed {
     val transition = rememberInfiniteTransition()
     val translateAnim by transition.animateFloat(
@@ -458,7 +439,6 @@ fun BookingItem(
                     Text(text = "$unit • $jam", style = MaterialTheme.typography.bodySmall, color = Color(0xFF7F8C8D))
                 }
 
-                // Badge Status
                 val badgeColor = when (status.lowercase()) {
                     "approved" -> Color(0xFFD4EFDF)
                     "rejected" -> Color(0xFFFADBD8)

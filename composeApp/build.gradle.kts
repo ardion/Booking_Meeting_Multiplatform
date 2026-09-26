@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
 }
 
-
 kotlin {
     androidTarget {
         compilerOptions {
@@ -57,20 +56,17 @@ kotlin {
             implementation("com.russhwolf:multiplatform-settings-no-arg:1.3.0")
             implementation(compose.materialIconsExtended)
 
-            // Ktor Core
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.logging)
 
-            // Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.no.arg)
             implementation(libs.kotlinx.datetime)
-
         }
 
         androidMain.dependencies {
@@ -86,7 +82,9 @@ kotlin {
             implementation("io.ktor:ktor-client-okhttp:3.0.0")
         }
 
-        // --- TAMBAHKAN DUA BLOK DI BAWAH INI ---
+        iosMain.dependencies {
+            implementation("io.ktor:ktor-client-darwin:3.0.0")
+        }
 
         val jsMain by getting {
             dependencies {
@@ -96,7 +94,6 @@ kotlin {
 
         val wasmJsMain by getting {
             dependencies {
-                // Ini yang bikin error tadi, harus didefinisikan eksplisit
                 implementation("io.ktor:ktor-client-js:3.0.0")
             }
         }

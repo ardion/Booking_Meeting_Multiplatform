@@ -10,8 +10,6 @@ import io.ktor.http.*
 class AuthApiService(private val client: HttpClient) {
 
     suspend fun login(request: LoginRequest): LoginResponse {
-        // Di KMP, kita tidak pakai Response<T> dari Retrofit,
-        // tapi langsung mengembalikan objeknya atau melempar exception jika gagal.
         return client.post("login") {
             contentType(ContentType.Application.Json)
             setBody(request)

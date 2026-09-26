@@ -8,10 +8,7 @@ import com.bumi.app.utils.Resource
 class LoginUseCase(
     private val repository: AuthRepository
 ) {
-    // Invoke tetap bisa digunakan seperti biasa
     suspend operator fun invoke(input: LoginRequest): Resource<AuthUser> {
-
-        // --- LOGIKA BISNIS (Domain Logic) ---
         if (input.username.isBlank()) {
             return Resource.Error("Username tidak boleh kosong")
         }
@@ -19,7 +16,6 @@ class LoginUseCase(
             return Resource.Error("Password minimal 6 karakter")
         }
 
-        // Jika validasi lolos, panggil repository
         return repository.login(input)
     }
 }

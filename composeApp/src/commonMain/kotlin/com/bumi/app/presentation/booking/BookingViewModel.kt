@@ -13,22 +13,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-// @HiltViewModel dihapus, kita pakai Koin di AppModule nantinya
 class MeetingViewModel(
     private val useCases: MeetingUseCases
 ) : ViewModel() {
 
-    // State untuk List Booking (Read)
     private val _meetingsState = MutableStateFlow<Resource<List<Meeting>>>(Resource.Idle)
     val meetingsState: StateFlow<Resource<List<Meeting>>> = _meetingsState.asStateFlow()
 
-    // State untuk hasil Create Booking (Write)
     private val _createBookingResult = MutableStateFlow<Resource<Unit>>(Resource.Idle)
     val createBookingResult: StateFlow<Resource<Unit>> = _createBookingResult.asStateFlow()
 
-    /**
-     * Mengambil semua data booking dari server
-     */
     fun getAllBookings() {
         viewModelScope.launch {
             useCases.getBookings().collect { resource ->
@@ -37,9 +31,6 @@ class MeetingViewModel(
         }
     }
 
-    /**
-     * Mengirim data booking baru ke server
-     */
     fun createBooking(
         pic: String,
         unit: String,
@@ -53,7 +44,7 @@ class MeetingViewModel(
 
             result.onSuccess {
                 _createBookingResult.value = Resource.Success(Unit)
-                getAllBookings() // Refresh list
+                getAllBookings()
             }.onFailure { error ->
                 _createBookingResult.value = Resource.Error(error.message ?: "Gagal membuat booking")
             }
@@ -65,7 +56,6 @@ class MeetingViewModel(
             useCases.updateStatus(id, status).onSuccess {
                 getAllBookings()
             }.onFailure { e ->
-                // Di KMP gunakan println() sebagai pengganti Log.e untuk debug sederhana
                 println("ViewModel Update Failed: ${e.message}")
             }
         }

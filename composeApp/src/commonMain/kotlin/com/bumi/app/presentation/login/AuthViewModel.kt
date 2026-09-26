@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-// Hapus @HiltViewModel dan @Inject
 class AuthViewModel(
     private val loginUseCase: LoginUseCase,
     private val sessionManager: SessionManager
@@ -24,13 +23,11 @@ class AuthViewModel(
             _loginState.value = Resource.Loading
 
             val input = LoginRequest(username = username, password = password)
-            // loginUseCase(input) memanggil fungsi invoke yang sudah kita buat
             _loginState.value = loginUseCase(input)
         }
     }
 
     fun saveSession(user: AuthUser) {
-        // sessionManager ini nanti akan kita buat versi Multiplatform-nya
         sessionManager.saveLoginStatus(user.id, user.nama, user.role)
     }
 

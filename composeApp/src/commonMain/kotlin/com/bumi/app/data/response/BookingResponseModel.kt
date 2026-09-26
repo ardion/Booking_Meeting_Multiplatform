@@ -32,7 +32,6 @@ data class BookingDto(
     @SerialName("jam_dipilih")
     val jam_dipilih: String,
 
-    // Sesuai temuan Logcat kamu: Pakai huruf besar "STATUS"
     @SerialName("STATUS")
     val status: String
 )

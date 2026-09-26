@@ -9,19 +9,13 @@ import io.ktor.util.reflect.typeInfo
 
 class MeetingApiService(private val client: HttpClient) {
 
-    // HAPUS: private val baseUrl = "https://api.kamu.com/"
-    // Karena URL sudah diatur secara terpusat di networkModule
-
     suspend fun createBooking(request: BookingRequest): SimpleResponse {
-        // Cukup panggil path-nya saja
         return client.post("create-booking") {
-            // Gunakan typeInfo untuk menghindari 'Argument type mismatch' di Ktor 3
             setBody(request, typeInfo<BookingRequest>())
         }.body()
     }
 
     suspend fun getBookings(): List<BookingDto> {
-        // Otomatis akan memanggil: https://chatbot-bristle.online/get-bookings
         return client.get("get-bookings").body()
     }
 

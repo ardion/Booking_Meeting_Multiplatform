@@ -6,9 +6,6 @@ import com.bumi.app.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-/**
- * Wrapper untuk mempermudah injeksi semua UseCase ke dalam ViewModel.
- */
 data class MeetingUseCases(
     val getBookings: GetBookingsUseCase,
     val createBooking: CreateBookingUseCase,

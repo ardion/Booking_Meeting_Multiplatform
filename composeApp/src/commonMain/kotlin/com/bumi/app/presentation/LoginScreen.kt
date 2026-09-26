@@ -18,7 +18,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
-// Import Resource KMP (Pastikan gambar ic_bumi_full sudah ada di commonMain/composeResources/drawable)
 import bumiapp.composeapp.generated.resources.Res
 import bumiapp.composeapp.generated.resources.ic_bumi_full
 
@@ -29,7 +28,7 @@ val SurfaceWhite = Color(0xFFFFFFFF)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    onLoginSuccess: () -> Unit // Kita sederhanakan trigger-nya
+    onLoginSuccess: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -41,7 +40,6 @@ fun LoginScreen(
             .fillMaxSize()
             .background(BackgroundBlue)
     ) {
-        // Header Area
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,7 +54,6 @@ fun LoginScreen(
             )
         }
 
-        // Login Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,7 +70,6 @@ fun LoginScreen(
                 Text(text = "Selamat Datang", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = PrimaryBlue)
                 Text(text = "Silahkan login untuk melanjutkan", fontSize = 14.sp, color = Color.Gray, modifier = Modifier.padding(bottom = 32.dp))
 
-                // Field Username
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
@@ -85,7 +81,6 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Field Password
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -102,10 +97,8 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Login Button
                 Button(
                     onClick = {
-                        // Simulasi Login (Nanti bisa hubungkan ke API/ViewModel)
                         if (username.isNotEmpty() && password.isNotEmpty()) {
                             isLoading = true
                             onLoginSuccess()

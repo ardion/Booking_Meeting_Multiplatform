@@ -11,7 +11,6 @@ import org.koin.dsl.module
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    // 1. Inisialisasi Koin untuk Web
     startKoin {
         modules(
             appModule,
@@ -20,7 +19,6 @@ fun main() {
         )
     }
 
-    // 2. Jalankan UI Compose
     CanvasBasedWindow(
         title = "BumiApp",
         canvasElementId = "ComposeTarget"
@@ -29,7 +27,6 @@ fun main() {
     }
 }
 
-// Module khusus Web untuk menyediakan Settings (LocalStorage)
 val wasmPlatformModule = module {
     single<Settings> { StorageSettings() }
 }

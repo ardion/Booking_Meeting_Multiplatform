@@ -14,24 +14,18 @@ class AuthRepositoryImpl(
 
     override suspend fun login(request: LoginRequest): Resource<AuthUser> {
         return try {
-            // Ktor langsung mengembalikan LoginResponse (bukan Response wrapper)
             val response = remoteDataSource.login(request)
 
-            // Karena Ktor sudah melakukan deserialisasi otomatis,
-            // kita tinggal cek datanya
             if (response.data != null) {
                 Resource.Success(response.data.toDomain())
             } else {
                 Resource.Error(response.message ?: "Username atau password salah")
             }
         } catch (e: ClientRequestException) {
-            // Menangkap error 4xx (Misal: 401 Unauthorized)
             Resource.Error("Username atau password salah")
         } catch (e: ServerResponseException) {
-            // Menangkap error 5xx (Server mati)
             Resource.Error("Server sedang bermasalah")
         } catch (e: Exception) {
-            // Menangkap error koneksi/internet
             Resource.Error("Koneksi gagal: ${e.message}")
         }
     }

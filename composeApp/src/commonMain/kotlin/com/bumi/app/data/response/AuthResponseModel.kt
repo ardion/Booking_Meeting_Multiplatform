@@ -11,7 +11,6 @@ data class LoginRequest(
 
 @Serializable
 data class LoginResponse(
-    // Ganti @SerializedName menjadi @SerialName
     @SerialName("status") val status: String,
     @SerialName("message") val message: String,
     @SerialName("data") val data: UserData?

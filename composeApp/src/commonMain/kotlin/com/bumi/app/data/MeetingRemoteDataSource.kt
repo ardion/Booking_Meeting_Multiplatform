@@ -26,7 +26,6 @@ class MeetingRemoteDataSourceImpl(
     }
 
     override suspend fun updateStatus(id: String, status: String): SimpleResponse {
-        // Logika mapOf sudah dipindah ke ApiService (Ktor version)
         return apiService.updateStatus(id, status)
     }
 

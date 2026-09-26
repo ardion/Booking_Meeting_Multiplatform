@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.sp
 import com.bumi.app.domain.model.AuthUser
 import com.bumi.app.utils.Resource
 import com.bumi.app.presentation.login.AuthViewModel
-import org.koin.compose.viewmodel.koinViewModel // Gunakan Koin, bukan Hilt
-import org.jetbrains.compose.resources.painterResource // Resource KMP
+import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.painterResource
 import bumiapp.composeapp.generated.resources.Res
-import bumiapp.composeapp.generated.resources.ic_bumi // Pastikan file ada di commonMain/composeResources
+import bumiapp.composeapp.generated.resources.ic_bumi
 
 val PrimaryBlue = Color(0xFF4A78A9)
 val BackgroundBlue = Color(0xFF4A78A9)
@@ -34,7 +34,6 @@ val SurfaceWhite = Color(0xFFFFFFFF)
 fun LoginScreen(
     onLoginSuccess: (AuthUser) -> Unit
 ) {
-    // 1. Ambil ViewModel via Koin (hiltViewModel tidak bisa di KMP)
     val viewModel: AuthViewModel = koinViewModel()
 
     var username by remember { mutableStateOf("") }
@@ -55,7 +54,6 @@ fun LoginScreen(
             .fillMaxSize()
             .background(BackgroundBlue)
     ) {
-        // Header Area
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -64,14 +62,12 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                // Menggunakan sistem resource KMP
                 painter = painterResource(Res.drawable.ic_bumi),
                 contentDescription = "Logo",
                 modifier = Modifier.size(230.dp)
             )
         }
 
-        // Login Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()

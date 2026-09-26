@@ -37,10 +37,8 @@ class MeetingRepositoryImpl(
                 booking_date = tanggal,
                 selected_times = jamList
             )
-            // Di Ktor, jika tidak crash/exception, berarti request sampai ke server
             val response = remoteDataSource.createBooking(request)
 
-            // Cek logic success berdasarkan response body (misal ada field status)
             if (response.status == "success" || response.message.contains("Success", true)) {
                 Result.success(Unit)
             } else {
